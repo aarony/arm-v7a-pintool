@@ -1,0 +1,254 @@
+/*BEGIN_LEGAL 
+#BEGIN_LEGAL
+##BEGIN_LEGAL
+##INTEL CONFIDENTIAL
+##Copyright 2002-2005 Intel Corporation All Rights Reserved.
+##
+##The source code contained or described herein and all documents
+##related to the source code (Material) are owned by Intel Corporation
+##or its suppliers or licensors. Title to the Material remains with
+##Intel Corporation or its suppliers and licensors. The Material may
+##contain trade secrets and proprietary and confidential information of
+##Intel Corporation and its suppliers and licensors, and is protected by
+##worldwide copyright and trade secret laws and treaty provisions. No
+##part of the Material may be used, copied, reproduced, modified,
+##published, uploaded, posted, transmitted, distributed, or disclosed in
+##any way without Intels prior express written permission.  No license
+##under any patent, copyright, trade secret or other intellectual
+##property right is granted to or conferred upon you by disclosure or
+##delivery of the Materials, either expressly, by implication,
+##inducement, estoppel or otherwise. Any license under such intellectual
+##property rights must be express and approved by Intel in writing.
+##
+##Unless otherwise agreed by Intel in writing, you may not remove or
+##alter this notice or any other notice embedded in Materials by Intel
+##or Intels suppliers or licensors in any way.
+##END_LEGAL
+#INTEL CONFIDENTIAL
+#Copyright 2002-2005 Intel Corporation All Rights Reserved.
+#
+#The source code contained or described herein and all documents
+#related to the source code (Material) are owned by Intel Corporation
+#or its suppliers or licensors. Title to the Material remains with
+#Intel Corporation or its suppliers and licensors. The Material may
+#contain trade secrets and proprietary and confidential information of
+#Intel Corporation and its suppliers and licensors, and is protected by
+#worldwide copyright and trade secret laws and treaty provisions. No
+#part of the Material may be used, copied, reproduced, modified,
+#published, uploaded, posted, transmitted, distributed, or disclosed in
+#any way without Intels prior express written permission.  No license
+#under any patent, copyright, trade secret or other intellectual
+#property right is granted to or conferred upon you by disclosure or
+#delivery of the Materials, either expressly, by implication,
+#inducement, estoppel or otherwise. Any license under such intellectual
+#property rights must be express and approved by Intel in writing.
+#
+#Unless otherwise agreed by Intel in writing, you may not remove or
+#alter this notice or any other notice embedded in Materials by Intel
+#or Intels suppliers or licensors in any way.
+#END_LEGAL
+Intel Open Source License 
+
+Copyright (c) 2002-2005 Intel Corporation 
+All rights reserved. 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.  Redistributions
+in binary form must reproduce the above copyright notice, this list of
+conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.  Neither the name of
+the Intel Corporation nor the names of its contributors may be used to
+endorse or promote products derived from this software without
+specific prior written permission.
+ 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE INTEL OR
+ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+END_LEGAL */
+
+//
+// @ORIGINAL_AUTHOR: Robert Cohn
+//
+
+#ifndef TYPES_VMAPI_H
+#define TYPES_VMAPI_H
+
+/*! @ingroup INST_ARGS
+  Determines where the analysis call is inserted relative to the instrumented object
+*/
+GLOBALTYPE typedef enum
+{
+    IPOINT_INVALID,
+    IPOINT_BEFORE, ///< Insert a call before an instruction or routine
+    IPOINT_AFTER,  ///< Insert a call on the fall thorugh path of an instruction or return path of a routine
+    IPOINT_ANYWHERE, ///< Insert a call anywhere inside a trace or a bbl
+    IPOINT_TAKEN_BRANCH ///< Insert a call on the taken edge of branch, side effects of branch are visible
+
+} IPOINT;
+
+/*! @ingroup INST_ARGS
+  Determines the arguments that are passed to the analysis call.
+*/
+GLOBALTYPE typedef enum 
+{
+    IARG_INVALID,
+    IARG_END, ///< Must be last in IARG list for *_InsertCall
+
+    IARG_ADDRINT, ///< Type: ADDRINT. Constant value (additional arg required)
+    IARG_PTR, ///< Type: VOID *. Constant value (additional pointer arg required)
+    IARG_BOOL, ///< Type: BOOL. Constant (additional BOOL arg required)
+    IARG_UINT32, ///< Type: UINT32. Constant (additional integer arg required)
+
+    IARG_INST_PTR, ///< Type: ADDRINT. The address of the instrumented instruction. This value does not change at IPOINT_AFTER.
+
+    IARG_REG_VALUE, ///< Type: ADDRINT for integer register. Value of a register (additional register arg required) @ref REG_BASIC_API
+
+    IARG_REG_REFERENCE, ///< Type: PIN_REGISTER *. Pointer to union holding register contents. Registers are updated.
+    IARG_REG_CONST_REFERENCE, ///< Type: PIN_REGISTER *. Pointer to union holding register contents. Registers are not updated.
+
+    IARG_MEMORYREAD_EA, ///< Type: ADDRINT. Effective address of a memory read, only valid if INS_IsMemoryRead is true
+    IARG_MEMORYREAD2_EA, ///< Type: ADDRINT. Effective address of a 2nd memory read (e.g. 2nd operand in cmps on ia32)
+    IARG_MEMORYWRITE_EA,///< Type: ADDRINT. Effective address of a memory write
+    IARG_MEMORYREAD_SIZE, ///< Type: ADDRINT. Size in bytes of memory read, repeating ia32 string instructions are treated as a single memory operation
+    IARG_MEMORYWRITE_SIZE,///< Type: ADDRINT. Size in bytes of memory write
+    IARG_BRANCH_TAKEN, ///< Type: BOOL. Non zero if a branch is taken
+    IARG_BRANCH_TARGET_ADDR, ///< Type: ADDRINT. Target address of this branch instruction, only valid if INS_IsBranchOrCall is true
+    IARG_FALLTHROUGH_ADDR,  ///< Type: ADDRINT. Fall through address of this instruction
+    IARG_EXECUTING, ///< Type: BOOL. Return false if the instruction will not be executed because of predication, otherwise true
+    IARG_PREDICATE, ///< Reserved. Do not use
+    
+    // These are internal only
+    IARG_REP_SIZE, ///< Reserved. Do not use
+    IARG_STACK_VALUE, ///< Reserved. Do not use
+    IARG_STACK_REFERENCE, ///< Reserved. Do not use
+    
+    // Syscall stuff
+    IARG_SYSCALL_NUMBER, ///< Type: ADDRINT. System call number. Valid for IPOINT_BEFORE at the system call instruction
+    IARG_SYSARG_REFERENCE, ///< Type: ADDRINT *. Pointer to system call argument n. Valid for IPOINT_BEFORE at the system call instruction
+    IARG_SYSARG_VALUE, ///< Type: ADDRINT. System call argument n. Valid for IPOINT_BEFORE at the system call instruction
+    IARG_SYSRET_VALUE, ///< Type: ADDRINT. System call return value. -1 if unsuccessful. (IPOINT_AFTER only)
+    IARG_SYSRET_ERRNO, ///< Type: INT32. System call errno (IPOINT_AFTER_only).
+    
+    // function arguments
+    IARG_FUNCARG_CALLSITE_REFERENCE, ///< Type: ADDRINT *. Pointer to integer argument n. Valid at the call site.
+    IARG_FUNCARG_CALLSITE_VALUE, ///< Type: ADDRINT. Integer argument n. Valid at the call site.
+    IARG_FUNCARG_ENTRYPOINT_REFERENCE, ///< Type: ADDRINT *. Pointer to integer argument n. Valid at the entry point of a routine.
+    IARG_FUNCARG_ENTRYPOINT_VALUE, ///< Type: ADDRINT. Integer argument n. Valid at the entry point of a routine.
+    IARG_FUNCRET_EXITPOINT_REFERENCE, ///< Type: ADDRINT *. Pointer to function result. Valid at return instruction.
+    IARG_FUNCRET_EXITPOINT_VALUE, ///< Type: ADDRINT. Function result. Valid at return instruction.
+
+    IARG_RETURN_IP,     ///< Type: ADDRINT. Return address for function call, only valid at the function entry point.
+ 
+    IARG_ORG_FUNCPTR, ///< Type: AFUNPTR. Function pointer to the original uninstrumented function.
+
+    IARG_THREAD_ID, ///< Type: UINT32. Application thread id.
+
+    IARG_CHECKPOINT, ///< Type: CHECKPOINT. Handle to access a checkpoint (processor state).
+    IARG_CONTEXT, ///< Type: CONTEXT. Handle to access a context (architectural state).
+    
+    IARG_RETURN_REGS,  ///< Register to write analysis function return value (additional register arg required).
+
+    IARG_REG_NAT_VALUE, ///< Type: BOOL. Nat value of register. Ipf only
+    IARG_REG_OUTPUT_FRAME_VALUE, ///< Type: ADDRINT for integer registers. Like IARG_REG_VALUE, but use index into RSE output frame instead of register name. Ipf only
+    IARG_REG_OUTPUT_FRAME_REFERENCE, ///< Type: ADDRINT *. Like IARG_REG_REFERENCE, but use index into RSE output frame instead of register name. Ipf only
+
+    IARG_IARGLIST, ///< Type: IARGLIST. List of IARGS which can be constructed one IARG at a time.
+
+    IARG_SYSCALL_ARG0, ///< DEPRECATED, see IARG_SYSARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_SYSCALL_ARGBASE = IARG_SYSCALL_ARG0, 
+    IARG_SYSCALL_ARG1, ///< DEPRECATED, see IARG_SYSARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_SYSCALL_ARG2, ///< DEPRECATED, see IARG_SYSARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_SYSCALL_ARG3, ///< DEPRECATED, see IARG_SYSARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_SYSCALL_ARG4, ///< DEPRECATED, see IARG_SYSARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_SYSCALL_ARG5, ///< DEPRECATED, see IARG_SYSARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_SYSCALL_ARGLAST = IARG_SYSCALL_ARG5,
+
+
+    IARG_G_RESULT0, ///< DEPRECATED, see IARG_SYSRET_{VALUE,REFERENCE}
+    IARG_G_RETBASE = IARG_G_RESULT0,
+    IARG_G_RESULTLAST = IARG_G_RESULT0,
+
+    IARG_G_ARG0_CALLEE, ///< DEPRECATED, see IARG_FUNCARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_G_ARGBASE_CALLEE = IARG_G_ARG0_CALLEE,
+    IARG_G_ARG1_CALLEE, ///< DEPRECATED, see IARG_FUNCARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_G_ARG2_CALLEE, ///< DEPRECATED, see IARG_FUNCARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_G_ARG3_CALLEE, ///< DEPRECATED, see IARG_FUNCARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_G_ARG4_CALLEE, ///< DEPRECATED, see IARG_FUNCARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_G_ARG5_CALLEE, ///< DEPRECATED, see IARG_FUNCARG_CALLSITE_{VALUE,REFERENCE}
+    IARG_G_ARGLAST_CALLEE = IARG_G_ARG5_CALLEE,
+
+    IARG_G_ARG0_CALLER, ///< DEPRECATED, see IARG_FUNCARG_ENTRYPOINT_{VALUE,REFERENCE}
+    IARG_G_ARGBASE_CALLER = IARG_G_ARG0_CALLER,
+    IARG_G_ARG1_CALLER, ///< DEPRECATED, see IARG_FUNCARG_ENTRYPOINT_{VALUE,REFERENCE}
+    IARG_G_ARG2_CALLER, ///< DEPRECATED, see IARG_FUNCARG_ENTRYPOINT_{VALUE,REFERENCE}
+    IARG_G_ARG3_CALLER, ///< DEPRECATED, see IARG_FUNCARG_ENTRYPOINT_{VALUE,REFERENCE}
+    IARG_G_ARG4_CALLER, ///< DEPRECATED, see IARG_FUNCARG_ENTRYPOINT_{VALUE,REFERENCE}
+    IARG_G_ARG5_CALLER, ///< DEPRECATED, see IARG_FUNCARG_ENTRYPOINT_{VALUE,REFERENCE}
+    IARG_G_ARGLAST_CALLER = IARG_G_ARG5_CALLER
+    
+} IARG_TYPE;
+
+/*! @ingroup OPTIMIZATION_API
+  Controls the type of probe
+*/
+GLOBALTYPE typedef enum 
+{
+    PROBE_INVALID,                  ///< Invalid
+    PROBE_REDIRECT,                 ///< Redirects control flow only, No instrumentation is used, safe to use anywhere
+    PROBE_SINGLE_THREAD,            ///< Allows instrumentation of non mt programs, scratch registers must be dead
+    PROBE_MULTI_THREAD,             ///< Allows instrumentation of mt programs, scratch registers must be dead, context passed in
+
+    PROBE_BRIDGE                    ///< Probe target is bridge to an analysis function
+} PROBE_TYPE;
+
+        
+// opaque pointer in level_vmapi, real type is in level_vm
+typedef const VOID * OPAQUE_IARGD;
+
+LOCALCONST UINT32 MAX_BYTES_PER_PIN_REG = 16;
+LOCALCONST UINT32 MAX_WORDS_PER_PIN_REG = (MAX_BYTES_PER_PIN_REG/2);
+LOCALCONST UINT32 MAX_DWORDS_PER_PIN_REG = (MAX_WORDS_PER_PIN_REG/2);
+LOCALCONST UINT32 MAX_QWORDS_PER_PIN_REG = (MAX_DWORDS_PER_PIN_REG/2);
+LOCALCONST UINT32 MAX_FLOATS_PER_PIN_REG = (MAX_BYTES_PER_PIN_REG/sizeof(float));
+LOCALCONST UINT32 MAX_DOUBLES_PER_PIN_REG = (MAX_BYTES_PER_PIN_REG/sizeof(double));
+
+
+union PIN_REGISTER
+{
+    UINT8  byte[MAX_BYTES_PER_PIN_REG];
+    UINT16 word[MAX_WORDS_PER_PIN_REG];
+    UINT32 dword[MAX_DWORDS_PER_PIN_REG];
+    UINT64 qword[MAX_QWORDS_PER_PIN_REG];
+
+    INT8   s_byte[MAX_BYTES_PER_PIN_REG];
+    INT16  s_word[MAX_WORDS_PER_PIN_REG];
+    INT32  s_dword[MAX_DWORDS_PER_PIN_REG];
+    INT64  s_qword[MAX_QWORDS_PER_PIN_REG];
+
+    FLT32  flt[MAX_FLOATS_PER_PIN_REG];
+    FLT64  dbl[MAX_DOUBLES_PER_PIN_REG];
+
+};
+
+
+// This is an opaque type defined in LEVEL_VMAPI
+// The actual type is IARGLIST_CLASS and is defined in LEVEL_VM
+class IARGLIST_CLASS;
+
+/*! @ingroup INST_ARGS
+  List of instrumentation arguments. See @ref IARGLIST_Alloc for its use
+*/
+GLOBALTYPE typedef IARGLIST_CLASS * IARGLIST;
+
+#endif

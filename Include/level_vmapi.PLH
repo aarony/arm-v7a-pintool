@@ -1,0 +1,42 @@
+//
+// @ORIGINAL_AUTHOR: Robert Cohn
+//
+/*! @file
+  
+ */
+
+#ifdef LEVEL_VMAPI_H
+#error duplicate inclusion
+#else
+#define LEVEL_VMAPI_H
+
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// READ ME,READ ME,READ ME,READ ME,READ ME,READ ME,READ ME,READ ME,READ ME,READ ME,
+//
+// the primary puprose of this headerfile is not to save you time typing
+// by having all kinds of obscure includes in here
+// The main purpose is rather to ensure a small, clean, consistent and portable interfaces
+// Consequently:
+//
+// * do not pollute or bloat this file unnecessarily
+// * ABSOLUTELY  NO STL HERE
+// * (ok, at least no more STL as we unfortunately already have: list,set,map,vector)
+// * No bizarre system specific stuff like signals either
+//
+// if your interface depends on obscure types defined in obscure header files
+// your interface needs to be cleaned up!
+//
+// RM
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+namespace LEVEL_VMAPI
+{
+
+using namespace LEVEL_CORE;
+
+#include "types_vmapi.TLH"
+
+}
+
+#endif

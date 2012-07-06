@@ -1,0 +1,53 @@
+For license information, see LICENSE and ExtLibs/LICENSE
+
+Read the manual in Doc/html/index.html or Doc/pin-user.{pdf,ps}.
+Send questions and bug reports to Pin.Project@intel.com
+
+Example usage
+=============
+To build and run a sample tool:
+
+cd SimpleExamples
+make opcodemix
+../Bin/pin -t opcodemix -- /bin/ls
+
+This will instrument and run /bin/ls, the output for this tool is in opcodemix.out.
+
+
+Restrictions
+============
+The version of the compiler you use to build a tool must be compatible with the pin kit. Gcc 3.2 and 3.3 compilers require a gcc3.2 kit. Gcc 3.4 requires a gcc3.4 kit, and Gcc 4.0 and later requires a gcc4.0 kit. This only applies to the compiler used to build a tool; the application can use any compiler.
+
+Position independent executables are not supported.
+
+To use pin on a multithreaded program use the -mt switch. This switch won't be necessary in the future.
+
+
+Additional information for using Pin on the Intel Mac
+=====================================================
+Due to a security check on MacOS-X, you need to apply the following 2 commands to the Pin executable before the first time you use it:
+	chgrp procmod Bin/pin
+	chmod g+s Bin/pin
+
+Note that you need the root permission to run the above 2 commands. Once you have done this, you can run Pin as a regular user.
+
+
+
+Modifications to the APIs
+=========================
+
+  May 31, 2006: The analysis argument abstractions IARG_SYSCALL_RESULT and 
+		IARG_SYSRET_REFERENCE have been removed.  A new analysis argument
+		abstraction, IARG_SYSRET_ERRNO, has been added.  This abstraction
+		will contain the error number from the system call.  The analysis
+		argument abstraction IARG_SYSRET_VALUE has been modified.  It will
+		still contain the return value when the system call is successful.
+		However, if the system call is unsuccessful, it will contain -1.
+		These abstractions are not supported on Windows.
+
+
+
+
+
+
+

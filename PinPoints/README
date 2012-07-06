@@ -1,0 +1,48 @@
+This is a kit for automatically characterizing and tracing Linux programs
+using Pin.
+
+Type "make" to build bin/isimpoint and bin/controller
+
+PRE-REQUISITE: SimPoint 2.0
+    * Please download SimPoint 2.0 sources from
+        http://www.cse.ucsd.edu/~calder/simpoint/ 
+        = Build SimPoint tools and copy all the executables and
+          scripts to ./bin.
+
+    * Put the 'bin' subdirectory in your PATH (e.g. setenv PATH `pwd`/bin:$PATH)
+
+Instructions:
+------------------
+There are three steps : [1] profile, [2] analyze, and [3] Visit pinpoints.
+
+Run the three scripts for the three steps in order; follow instructions.
+
+NOTE: The steps require some manual intervention.
+
+%./Step1.sh
+%./Step2.sh
+%./Step.check_pinpoints.sh
+
+You may also try the sample branch predictor using:
+%./Step.branch_predictor.sh
+
+--------------------------
+FAQ:
+[1] Why I am getting an error 'xyz not found'?
+Ans: See PRE-REQUISITES above.
+
+[2] I am getting " Error: Pinpoint markers are out of order" during
+        Step.check_pinpoints.sh;  what should I do?
+Ans: Your pinpoints are not repeatable. There could be many reasons
+    for this. 
+    * Try increasing run-time of your program -- short programs
+        will require smaller slice_size and even a small run-to-run
+        variation may cause you to miss some pinpoints.
+    * If you are currently using a dynamically linked binary try
+     using a statically linked binary of your program. Shared libraries
+     can get loaded at different addresses on different runs and if
+     you have a pinpoint in a shared library that may not be repeatable.
+
+[3] How do I drive my simulator using pinpoints?
+Ans: You will need to write your own PIN-tool -- use branch_predictor.C as 
+a  starting point.

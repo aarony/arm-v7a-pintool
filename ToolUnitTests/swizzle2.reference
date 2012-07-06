@@ -1,0 +1,16 @@
+Adding unswizzle to MyFree
+Adding swizzle to MyAlloc
+Mmap 0xb0000000
+Swizzling 0xb0000000
+alloc 0xb1000000
+Unswizzling 0xb1000000
+Unswizzling 0xb1000000
+al 1
+Unswizzling 0xb1000000
+al 1 toout - to 8 from 0xb1000000 fromout 0xb1000008
+Unswizzling 0xb1000000
+Unswizzling 0xb1000000
+al 3 to 0xb1000000 toout 0xb1000008 fromout - from 8
+Unswizzling 0xb1000000
+Unswizzling 0xb1000000
+MyFree 0xb0000000

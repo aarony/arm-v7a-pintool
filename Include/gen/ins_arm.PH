@@ -1,0 +1,163 @@
+//Groups: @ingroup\s+(API_REF|IMG_BASIC_API|INS_BASIC_API|INS_INST_API|INS_BASIC_API_GEN_IA32|INS_BASIC_API_ARM|INS_BASIC_API_IA32|INS_BASIC_API_IPF|INS_MOD_API_GEN_IA32|SEC_BASIC_API|RTN_BASIC_API|REG_BASIC_API|REG_CPU_GENERIC|REG_CPU_ARM|REG_CPU_IPF|REG_CPU_IA32|TRACE_BASIC_API|BBL_BASIC_API|SYM_BASIC_API|MISC_PRINT|MISC_PARSE|PIN_MEMORY|KNOB_API|KNOB_BASIC|KNOB_PRINT|LOCK|PIN_CONTROL|DEBUG_API|TYPE_BASE|INSTLIB|ALARM|ROGUE|ROGUE_CFG|ROGUE_CFG_BASIC_API|ROGUE_EDG_BASIC_API|ROGUE_BBL_BASIC_API|ROGUE_INS_BASIC_API|ROGUE_TRACE_BASIC_API|ROGUE_CONTROL_BASIC_API|CODECACHE_API|OPTIMIZATION_API|MISC|CHECKPOINTING|INST_ARGS|PIN_THREAD_API|EDG_BASIC|BBL_BASIC|ROGUE_BASIC_API|CODECACHE_NYI_API|INS_BASIC_API_GEN_ARM|INS_BASIC_API_GEN_IPF|MESSAGE_TYPE|MESSAGE_BASIC|MISC_BASIC|ITC_INST_API|CHECKPOINTING_PRIVATE
+/* PIN API */
+
+/* THIS FILE IS AUTOMAGICALLY GENERATED - DO NOT CHANGE DIRECTLY*/
+
+
+extern OPCODE INS_Opcode(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern VOID InitJmpLikeCall(INS call, INS jmp);
+
+                                                                  /* DO NOT EDIT */
+extern BBL SimulateRetPush(INS call);
+
+                                                                  /* DO NOT EDIT */
+extern BBL SimulateRetPopToMem(INS ret, ADDRINT offset);
+
+                                                                  /* DO NOT EDIT */
+extern VOID INS_InvertBr(INS br);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsPatchable(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern USIZE INS_InitDirectBranchLikeOriginalAtAddressToAddress(INS ins, ADDRINT src_addr, ADDRINT dst_addr);
+
+                                                                  /* DO NOT EDIT */
+extern USIZE INS_InitBranchProbe(INS ins, ADDRINT src_addr, ADDRINT dst_addr);
+
+                                                                  /* DO NOT EDIT */
+extern VOID INS_InitAndEncodeCallAtAddressToAddress(INS call, ADDRINT src_addr, ADDRINT dst_addr);
+
+                                                                  /* DO NOT EDIT */
+extern USIZE INS_InitLongjumpAtAddrToAddr(INS dst, ADDRINT src_addr, ADDRINT dst_addr);
+
+                                                                  /* DO NOT EDIT */
+extern VOID INS_EncodeAtAddr(INS dst, ADDRINT addr);
+
+                                                                  /* DO NOT EDIT */
+extern USIZE INS_InitBranchAtAddr(INS dst, ADDRINT src_addr, ADDRINT dst_addr);
+
+                                                                  /* DO NOT EDIT */
+extern USIZE INS_InitCallAtAddressToAddress(INS dst, ADDRINT src_addr, ADDRINT dst_addr);
+
+                                                                  /* DO NOT EDIT */
+extern UINT32 INS_MaxNumRRegs(INS x);
+
+                                                                  /* DO NOT EDIT */
+extern UINT32 INS_MaxNumWRegs(INS x);
+
+                                                                  /* DO NOT EDIT */
+extern REG INS_RegR(INS ins, UINT32 no );
+
+                                                                  /* DO NOT EDIT */
+extern REG INS_RegW(INS ins, UINT32 no );
+
+                                                                  /* DO NOT EDIT */
+extern VOID INS_RegRSet(INS ins, UINT32 no, REG reg );
+
+                                                                  /* DO NOT EDIT */
+extern VOID INS_RegWSet(INS ins, UINT32 no, REG reg );
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsDirectBranchOrCall(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsIndirectBranchOrCall(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsBranchOrCall(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsCall(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsProcedureCall(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsRet(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsStackRead(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsStackWrite(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsIpRelRead(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsIpRelWrite(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern CATEGORY INS_Category(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern string INS_StringShort(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsOriginal(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern string INS_Disassemble(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern string OPCODE_StringShort(UINT32 opcode);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsSyscall(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_HasFallThrough(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsImplicitMemoryRead(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsImplicitMemoryWrite(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsMemoryRead(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_HasMemoryRead2(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsMemoryWrite(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern UINT32 INS_MemorySize(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern UINT32 INS_MemoryReadSize(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern UINT32 INS_MemoryWriteSize(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern INT32 INS_MemoryOffset(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern INT32 INS_UpdateOffset(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern PREDICATE INS_GetPredicate(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsPredicated(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsAtomicUpdate(const INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_IsPrefetch(INS ins);
+
+                                                                  /* DO NOT EDIT */
+extern BOOL INS_HasProperty(INS ins, INS_PROP prop);
+
+                                                                  /* DO NOT EDIT */
+extern USIZE INS_MaxProbeSize();
+
+                                                                  /* DO NOT EDIT */
+
