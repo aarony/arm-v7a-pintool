@@ -1,0 +1,1 @@
+[Pintool](http://www.pintool.com) is a dynamic binary instrumentation framework initially for Intel architectures, but has been ported to others such as ARM V5-TE. This project is an effort to upgrade from V5-TE to V7-A, given the popularity and prevalence of this ISA in the world today.
